@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'shopping cart app'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['shopping-cart-app:8081'] # Targeting the Spring Boot app's actuator endpoint
