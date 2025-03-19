@@ -1,10 +1,7 @@
 package com.learning.shoppingcart.Entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,14 +10,15 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
+@Table(name = "product_details")
 public class ProductDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long productId;
-    String productName;
-    String productDescription;
-    BigDecimal productPrice;
-    int productQuantity;
-    String productCategory;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private int quantity;
+    private String category;
 }
