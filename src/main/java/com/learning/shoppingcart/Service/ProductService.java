@@ -22,13 +22,9 @@ public class ProductService {
             return productRepository.findById(id).get();
         }
         else{
-            return null;
+            return null; // FIXME: Introduce Response Entity to Manage Error Handling and Custom Error Responses
         }
     }
-
-//    public ProductDetails saveProduct(ProductDetails product) {
-//        return productRepository.save(product);
-//    }
 
     public ProductDetails saveProduct(ProductDetails productDetails) {
         return productRepository.save(productDetails);
