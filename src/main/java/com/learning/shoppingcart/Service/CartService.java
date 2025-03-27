@@ -47,23 +47,24 @@ public class CartService {
 
       List<CartItems> cartItems=  cartItemsRepository.findByCartCartIdAndProductDetailsProductId(cart.getCartId(),productDetails.getProductId());
 
-      if(cartItems.size()==0){
+      if(cartItems.isEmpty()){
           CartItems newCartItem = new CartItems();
           newCartItem.setCart(cart);
           newCartItem.setQuantity(addCartRequest.getQuantity());
           newCartItem.setProductDetails(productDetails);
           newCartItem.setTotalPrice(productDetails.getAmount().multiply(BigDecimal.valueOf(addCartRequest.getQuantity())));
           cartItems.add(newCartItem);
+          cartItemsRepository.save(newCartItem);
       }
       else {
-
+         // TODO - If the Cart Items Exist update the  Quantity and Total Amount
       }
 
+        // TODO - Update Cart with the Cart Items
 
+        // TODO - Save the Latest Cart in DB
 
-
-
-
+        // TODO - Transform the response to the Response DTO and return Cart Response
 
         return  null;
     }
