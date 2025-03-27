@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "users")
-public class Users {
+@Table(name = "user_details")
+public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
+    @Column(name = "user_id")
     private Long userId;
     private String name;
     private String email;

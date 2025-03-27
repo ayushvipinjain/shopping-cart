@@ -5,6 +5,8 @@ import com.learning.shoppingcart.Service.CartService;
 import com.learning.shoppingcart.models.cart.AddCartRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,9 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    public ResponseEntity<?> addCart(AddCartRequest addCartRequest) {
-        return ResponseEntity.ok(cartService.addToCart(""));
+    @PostMapping("/cart")
+    public ResponseEntity<?> addCart(@RequestBody AddCartRequest addCartRequest) {
+        return ResponseEntity.ok(cartService.addToCart(addCartRequest));
     }
 
 }

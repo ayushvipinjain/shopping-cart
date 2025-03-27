@@ -16,22 +16,23 @@ import java.util.List;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cart_id;
+    @Column(name = "cart_id")
+    private Long cartId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private Users users;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private UserDetails userDetails;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CartItems> cartItems = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "sub_total")
     private BigDecimal subTotal = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "tax_rate")
     private BigDecimal taxRate = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "total")
     private BigDecimal total = BigDecimal.ZERO;
 }
 

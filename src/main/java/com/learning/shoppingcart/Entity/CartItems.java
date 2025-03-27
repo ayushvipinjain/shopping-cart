@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "cartitems")
+@Table(name = "cart_items")
 public class CartItems {
 
     @Id
@@ -18,7 +18,7 @@ public class CartItems {
     private Long cartItemId;
 
     @ManyToOne
-    @JoinColumn(name = "productId" , referencedColumnName = "productId")
+    @JoinColumn(name = "product_id" , referencedColumnName = "product_id")
     private ProductDetails productDetails ;
 
     private Integer quantity;
