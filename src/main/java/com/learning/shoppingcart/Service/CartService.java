@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -34,42 +35,42 @@ public class CartService {
     private CartItemsRepository cartItemsRepository;
 
 
-    public CartResponse addToCart(AddCartRequest addCartRequest){
+    public CartResponse addToCart(AddCartRequest addCartRequest) {
 
-       UserDetails userDetails = userRepository.findById(addCartRequest.getUserId())
-               .orElseThrow(()-> new RuntimeException("User Not Found"));
+        UserDetails userDetails = userRepository.findById(addCartRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("User Not Found"));
 
-      ProductDetails productDetails=  productRepository.findById(addCartRequest.getProductId().longValue())
-               .orElseThrow(()-> new RuntimeException("Product Not Found"));
+        ProductDetails productDetails = productRepository.findById(addCartRequest.getProductId().longValue())
+                .orElseThrow(() -> new RuntimeException("Product Not Found"));
 
-       Cart cart = cartRepository.findByUserDetailsUserId(userDetails.getUserId())
-               .orElseGet(()-> createNewCart(userDetails));
+        Cart cart = cartRepository.findByUserDetailsUserId(userDetails.getUserId())
+                .orElseGet(() -> createNewCart(userDetails));
 
-      List<CartItems> cartItems=  cartItemsRepository.findByCartCartIdAndProductDetailsProductId(cart.getCartId(),productDetails.getProductId());
+        Optional<CartItems> cartItems = cartItemsRepository.findByCartCartIdAndProductDetailsProductId(cart.getCartId(), productDetails.getProductId());
 
-      if(cartItems.isEmpty()){
-          CartItems newCartItem = new CartItems();
-          newCartItem.setCart(cart);
-          newCartItem.setQuantity(addCartRequest.getQuantity());
-          newCartItem.setProductDetails(productDetails);
-          newCartItem.setTotalPrice(productDetails.getAmount().multiply(BigDecimal.valueOf(addCartRequest.getQuantity())));
-          cartItems.add(newCartItem);
-          cartItemsRepository.save(newCartItem);
-      }
-      else {
-         // TODO - If the Cart Items Exist update the  Quantity and Total Amount
-      }
+        if (cartItems.isEmpty()) {
+            // Generate the cart item if not present
+            CartItems myCartItems = new CartItems();
+            myCartItems.setCart(cart);
+            myCartItems.setQuantity(addCartRequest.getQuantity());
+            myCartItems.setProductDetails(productDetails);
+            myCartItems.setTotalPrice(productDetails.getAmount().multiply(BigDecimal.valueOf(addCartRequest.getQuantity())));
+            cartItemsRepository.save(myCartItems);
+        } else {
+            // If the Cart Items Exist update the  Quantity and Total Amount
+            CartItems existingCartItem = cartItems.get();
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + addCartRequest.getQuantity());
+            existingCartItem.setTotalPrice(existingCartItem.getProductDetails().getAmount().multiply(BigDecimal.valueOf(existingCartItem.getQuantity())));
+            cartItemsRepository.save(existingCartItem);
+        }
 
-        // TODO - Update Cart with the Cart Items
+        CartResponse cartResponse = new CartResponse();
+        cartResponse.setCartId(cart.getCartId());
 
-        // TODO - Save the Latest Cart in DB
-
-        // TODO - Transform the response to the Response DTO and return Cart Response
-
-        return  null;
+        return cartResponse;
     }
 
-    private Cart createNewCart(UserDetails userDetails){
+    private Cart createNewCart(UserDetails userDetails) {
         Cart cart = new Cart();
         cart.setUserDetails(userDetails);
         cart.setTaxRate(taxRate);

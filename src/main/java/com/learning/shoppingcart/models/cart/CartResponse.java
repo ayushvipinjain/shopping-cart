@@ -1,5 +1,10 @@
 package com.learning.shoppingcart.models.cart;
 
-public class CartResponse {
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class CartResponse {
+    private Long cartId;
 }
