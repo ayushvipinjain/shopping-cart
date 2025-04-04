@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CartController {
 
-    private CartService cartService;
+    private final CartService cartService;
 
     public CartController(CartService cartService) {
         this.cartService = cartService;
