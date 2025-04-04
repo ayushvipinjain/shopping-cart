@@ -1,0 +1,25 @@
+# TODO List
+
+- Implement the get cart Total end point - [In Progress]
+- Update the price in the Total End point for the Product Array - [Pending]
+- Update the Unique Identifier for Cart Id to be UUID instead of Long Value - [Pending]
+- Add Unit Tests for the Add to Cart - [ Pending]
+- Add Unit Tests for the Total End Point - [Pending]
+- Setup API Integration Tests for the End Points - [Pending]
+
+
+Test Scenarios -
+1. Add to Cart
+- Product not found
+- User not Found
+- User Found
+- Product Found
+- Cart Not Present before near cart created with the input request
+- Cart Already Present and updated with the input request
+
+2. Get Cart Total
+- Cart Not Found
+- Single Cart Items against a Cart Id
+- Multiple Cart Items
+- Tax Calculation Logic
+

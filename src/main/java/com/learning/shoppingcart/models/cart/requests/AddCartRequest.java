@@ -1,4 +1,4 @@
-package com.learning.shoppingcart.models.cart;
+package com.learning.shoppingcart.models.cart.requests;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,15 +1,11 @@
 package com.learning.shoppingcart.Controller;
 
-import com.learning.shoppingcart.Entity.Cart;
 import com.learning.shoppingcart.Service.CartService;
-import com.learning.shoppingcart.models.cart.AddCartRequest;
-import com.learning.shoppingcart.models.cart.CartResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.learning.shoppingcart.models.cart.requests.AddCartRequest;
+import com.learning.shoppingcart.models.cart.response.CartResponse;
+import com.learning.shoppingcart.models.cart.response.CartTotal;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/")
 @RestController
@@ -24,6 +20,11 @@ public class CartController {
     @PostMapping("/cart")
     public ResponseEntity<CartResponse> addCart(@RequestBody AddCartRequest addCartRequest) {
         return ResponseEntity.ok(cartService.addToCart(addCartRequest));
+    }
+
+    @PostMapping("/cart/{cartId}/total")
+    public ResponseEntity<CartTotal> getCartTotal(@PathVariable Long cartId) {
+        return ResponseEntity.ok(cartService.getCartTotal(cartId));
     }
 
 }

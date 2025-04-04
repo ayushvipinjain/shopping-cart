@@ -8,19 +8,22 @@ import com.learning.shoppingcart.Repository.CartItemsRepository;
 import com.learning.shoppingcart.Repository.CartRepository;
 import com.learning.shoppingcart.Repository.ProductRepository;
 import com.learning.shoppingcart.Repository.UserRepository;
-import com.learning.shoppingcart.models.cart.AddCartRequest;
-import com.learning.shoppingcart.models.cart.CartResponse;
+import com.learning.shoppingcart.models.cart.requests.AddCartRequest;
+import com.learning.shoppingcart.models.cart.response.CartResponse;
+import com.learning.shoppingcart.models.cart.response.CartTotal;
+import com.learning.shoppingcart.models.cart.response.Products;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CartService {
 
-    BigDecimal taxRate = BigDecimal.valueOf(5.00);
+    BigDecimal taxRate = BigDecimal.valueOf(0.05);
 
     @Autowired
     private CartRepository cartRepository;
@@ -68,6 +71,36 @@ public class CartService {
         cartResponse.setCartId(cart.getCartId());
 
         return cartResponse;
+    }
+
+    public CartTotal getCartTotal(Long id) {
+
+        List<CartItems> cartItems = cartItemsRepository.findByCartCartId(id);
+
+        CartTotal cartTotal = new CartTotal();
+        List<Products> products = new ArrayList<>();
+        cartItems.forEach(cartItem -> {
+            Products productDetails = new Products();
+            productDetails.setProductId(cartItem.getProductDetails().getProductId());
+            productDetails.setProductName(cartItem.getProductDetails().getName());
+            productDetails.setQuantity(cartItem.getProductDetails().getQuantity());
+            productDetails.setSubtotal(cartItem.getTotalPrice());
+            products.add(productDetails);
+        });
+
+        BigDecimal subtotal = cartItems.stream()
+                .map(CartItems::getTotalPrice)
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
+
+        BigDecimal tax = subtotal.multiply(taxRate);
+
+        BigDecimal total = tax.add(subtotal);
+
+        cartTotal.setTax(tax);
+        cartTotal.setSubtotal(subtotal);
+        cartTotal.setProducts(products);
+        cartTotal.setTotal(total);
+        return cartTotal;
     }
 
     private Cart createNewCart(UserDetails userDetails) {
